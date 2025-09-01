@@ -28,7 +28,7 @@ type UseAuthStore = {
 
 // axios instance
 const api = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: "http://localhost:3000",
   withCredentials: true,
 });
 
@@ -43,7 +43,7 @@ export const useAuthStore = create<UseAuthStore>()(
       // login
       login: async (inputData: InputData) => {
         try {
-          const res = await api.post("/api/login", inputData);
+          const res = await api.post("/admin/login", inputData);
           const token = res.data.accessToken;
           const decoded = jwtDecode<TokenPayload>(token);
           set({ token, userId: decoded.userId, error: null });
@@ -56,7 +56,7 @@ export const useAuthStore = create<UseAuthStore>()(
       // logout
       logout: async () => {
         try {
-          await api.post("/api/logout");
+          await api.post("/admin/logout");
         } catch (err) {
           console.error("Logout failed", err);
         } finally {
@@ -67,7 +67,7 @@ export const useAuthStore = create<UseAuthStore>()(
       // refresh
       refresh: async () => {
         try {
-          const res = await api.post("/api/refresh"); // gets new access token
+          const res = await api.post("/admin/refresh");
           const token = res.data.accessToken;
           const decoded = jwtDecode<TokenPayload>(token);
           set({ token, userId: decoded.userId, error: null });
@@ -89,26 +89,47 @@ export const useAuthStore = create<UseAuthStore>()(
         const { token } = get();
         if (!token) return true;
         const decoded = jwtDecode<TokenPayload>(token);
-        return Date.now() >= decoded.exp * 1000 - 30_000; // 30 sec buffer
+        return Date.now() >= decoded.exp * 1000 - 30_000;
       },
     }),
     { name: "auth-storage" }
   )
 );
 
-// request interceptor (attach token)
-api.interceptors.request.use(async (config) => {
-  const { token, isTokenExpired, refresh } = useAuthStore.getState();
+// request interceptor (just attach token, no refresh)
+api.interceptors.request.use((config) => {
+  const { token } = useAuthStore.getState();
 
-  if (token && isTokenExpired()) {
-    await refresh();
-    config.headers.Authorization = `Bearer ${useAuthStore.getState().token}`;
-  } else if (token) {
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
   return config;
 });
+
+// response interceptor (handle refresh on 401)
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        await useAuthStore.getState().refresh();
+        originalRequest.headers.Authorization = `Bearer ${
+          useAuthStore.getState().token
+        }`;
+        return api(originalRequest);
+      } catch (err) {
+        useAuthStore.getState().logout();
+        throw err;
+      }
+    }
+
+    throw error;
+  }
+);
 
 // response interceptor (retry once on 401)
 api.interceptors.response.use(

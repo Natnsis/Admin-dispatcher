@@ -12,24 +12,18 @@ const Login = () => {
   const data = { email, password };
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // try{
-    //await login(data);
-    //const userId = useAuthStore.getState.userId;
-    //if(!userId) console.log("unable to get userId")
-    //navigate("/dashboard");
-    // }catch(e){
 
-    // }
-
-    // Simulate login API call
-    setTimeout(() => {
-      console.log("Logging in with:", { email, password });
-      // You can add real authentication logic here
+    try {
+      await login(data);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error(err);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
