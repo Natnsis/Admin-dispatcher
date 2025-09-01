@@ -1,15 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@radix-ui/react-label";
+import { Label } from "@/components/ui/label";
+import { useAuthStore } from "@/stores/authStore";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const login = useAuthStore((state) => state.login);
+  const data = { email, password };
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
+    // try{
+    //await login(data);
+    //const userId = useAuthStore.getState.userId;
+    //if(!userId) console.log("unable to get userId")
+    //navigate("/dashboard");
+    // }catch(e){
+
+    // }
 
     // Simulate login API call
     setTimeout(() => {
