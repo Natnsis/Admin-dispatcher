@@ -12,8 +12,13 @@ import {
   Twitter,
   Workflow,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Card } from "./components/ui/card";
 const App = () => {
+  const navigate = useNavigate();
+  const login = () => {
+    navigate("/login");
+  };
   return (
     <div className="p-5 flex flex-col gap-15">
       <header className="flex justify-between items-center">
@@ -23,7 +28,9 @@ const App = () => {
           <a href="">Benefits</a>
           <a href="">How It Works</a>
           <a href="">Developers</a>
-          <Button className="mx-5">Login</Button>
+          <Button className="mx-5" onClick={login}>
+            Login
+          </Button>
         </nav>
       </header>
 
