@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Inbox, LayoutDashboard, MapPlus, UserPen } from "lucide-react";
+import { links } from "@/assets/styles";
 
 const Sidebar = () => {
   return (
@@ -12,22 +14,22 @@ const Sidebar = () => {
         <p className="text-sm">OVERVIEW</p>
       </div>
       <div className="font-bold flex flex-col gap-5">
-        <Button className="flex gap-1 items-center pl-5 h-10">
+        <Link to="/dashboard" className={links}>
           <LayoutDashboard />
           <p>Dashboard</p>
-        </Button>
-        <Button className="flex gap-1 items-center pl-5 h-10">
+        </Link>
+        <Link to="/dispatchers" className={links}>
           <UserPen />
           <p>Dispatchers</p>
-        </Button>
-        <Button className="flex gap-1 items-center pl-5 h-10">
+        </Link>
+        <Link to="/districts" className={links}>
           <MapPlus />
           <p>Districts</p>
-        </Button>
-        <Button className="flex gap-1 items-center pl-5 h-10">
+        </Link>
+        <Link to="/inbox" className={links}>
           <Inbox />
           <p>Inbox</p>
-        </Button>
+        </Link>
       </div>
     </div>
   );

@@ -6,11 +6,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
+import Dispatchers from "./pages/Dispatchers.tsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
   { path: "/login", element: <Login /> },
   { path: "/dashboard", element: <Dashboard /> },
+  { path: "/dispatchers", element: <Dispatchers /> },
   { path: "*", element: <NotFound /> },
 ]);
 
