@@ -1,8 +1,12 @@
 import { bigHeaders } from "@/assets/styles";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
+import { useNavigate } from "react-router-dom";
 const Login = () => {
+  const navigate = useNavigate();
+  const login = () => {
+    navigate("/dashboard");
+  };
   return (
     <div className="flex justify-between w-screen h-screen">
       <div className="flex justify-center items-center w-[50vw]">
@@ -11,7 +15,7 @@ const Login = () => {
           <h2 className={bigHeaders}>Welcome Back</h2>
           <Input placeholder="admin@gmail.com" />
           <Input placeholder="*********" type="password" />
-          <Button>Login</Button>
+          <Button onClick={login}>Login</Button>
         </div>
       </div>
       <div className="flex justify-end h-full ">
