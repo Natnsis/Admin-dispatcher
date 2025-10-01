@@ -36,7 +36,7 @@ const chartConfig = {
 
 export function ChartBarDefault() {
   return (
-    <Card>
+    <Card className="bg-[#d6d7d2]">
       <CardHeader>
         <CardTitle>Bar Chart</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
@@ -56,7 +56,7 @@ export function ChartBarDefault() {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
+            <Bar dataKey="desktop" fill="#5b0302" radius={8} />
           </BarChart>
         </ChartContainer>
       </CardContent>
