@@ -10,8 +10,13 @@ import {
   UserPlus,
   UsersRound,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Dispatchers = () => {
+  const navigate = useNavigate();
+  const add = () => {
+    navigate("/add");
+  };
   return (
     <div className="grid grid-cols-6 h-screen">
       <div className="col-span-1 border-r-1 border-[#4d3e27] p-5">
@@ -20,7 +25,7 @@ const Dispatchers = () => {
       <div className="col-span-3 p-5 ">
         <div className="flex justify-between items-center p-5">
           <h1 className="font-heading text-4xl">Manage Dispatchers</h1>
-          <Button>
+          <Button onClick={add}>
             <UserPlus />
             <p>Add Dispatcher</p>
           </Button>

@@ -7,11 +7,13 @@ import Login from "./pages/Login.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import Dispatchers from "./pages/Dispatchers.tsx";
+import DispatchersForm from "./pages/DispatchersForm.tsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
   { path: "/login", element: <Login /> },
   { path: "/dashboard", element: <Dashboard /> },
+  { path: "/add", element: <DispatchersForm /> },
   { path: "/dispatchers", element: <Dispatchers /> },
   { path: "*", element: <NotFound /> },
 ]);
