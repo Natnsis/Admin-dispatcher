@@ -87,3 +87,41 @@ export const Dispatch = [
     status: "online",
   },
 ];
+
+export const District = [
+  {
+    id: "1",
+    name: "Assosa",
+    latitude: "21.43.35",
+    longitude: "324.325.325",
+    createdAt: "32-324-2345",
+  },
+  {
+    id: "2",
+    name: "Assosa",
+    latitude: "21.43.35",
+    longitude: "324.325.325",
+    createdAt: "32-324-2345",
+  },
+  {
+    id: "3",
+    name: "Assosa",
+    latitude: "21.43.35",
+    longitude: "324.325.325",
+    createdAt: "32-324-2345",
+  },
+  {
+    id: "4",
+    name: "Assosa",
+    latitude: "21.43.35",
+    longitude: "324.325.325",
+    createdAt: "32-324-2345",
+  },
+  {
+    id: "5",
+    name: "Assosa",
+    latitude: "21.43.35",
+    longitude: "324.325.325",
+    createdAt: "32-324-2345",
+  },
+];

@@ -25,7 +25,7 @@ const Profile = () => {
         <h1 className="text-start mb-5 text-xl font-text">
           Online Dispatchers
         </h1>
-        <div className="overflow-y-auto h-[50vh] px-5 flex flex-col gap-5">
+        <div className="overflow-y-auto h-[45vh] px-5 flex flex-col gap-5">
           {dispatchers.map((d) => (
             <div key={d.id} className="flex justify-between items-center">
               <div className="flex gap-2 items-center">

@@ -8,13 +8,17 @@ import NotFound from "./pages/NotFound.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import Dispatchers from "./pages/Dispatchers.tsx";
 import DispatchersForm from "./pages/DispatchersForm.tsx";
+import Districts from "./pages/Ditricts.tsx";
+import DistrictsForm from "./pages/DistrictsForm.tsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
   { path: "/login", element: <Login /> },
   { path: "/dashboard", element: <Dashboard /> },
   { path: "/add", element: <DispatchersForm /> },
+  { path: "/addDistrict", element: <DistrictsForm /> },
   { path: "/dispatchers", element: <Dispatchers /> },
+  { path: "/districts", element: <Districts /> },
   { path: "*", element: <NotFound /> },
 ]);
 
