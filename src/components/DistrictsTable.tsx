@@ -17,12 +17,15 @@ export function DistrictsTable() {
   const deleteDistrict = useDistrictStore((state) => state.deleteDistrict);
   useEffect(() => {
     fetchDistrict();
-  }, [fetchDistrict]);
+  }, [fetchDistrict, deleteDistrict]);
+
+  console.log(data);
   return (
     <div className="h-[70vh] overflow-y-auto rounded-md border">
       <Table>
         <TableHeader className="sticky top-0 z-10 ">
           <TableRow>
+            <TableHead>No.</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Latitude</TableHead>
             <TableHead>Longitude</TableHead>
@@ -31,8 +34,9 @@ export function DistrictsTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((d) => (
+          {data.map((d, index) => (
             <TableRow key={d.id}>
+              <TableCell>{index + 1}</TableCell>
               <TableCell>{d.name}</TableCell>
               <TableCell>{d.latitude}</TableCell>
               <TableCell>{d.longitude}</TableCell>

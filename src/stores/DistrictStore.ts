@@ -4,8 +4,8 @@ import axios, { type AxiosResponse } from "axios";
 export type DistrictType = {
   id?: string;
   name: string;
-  longitude: string;
-  latitude: string;
+  longitude: number;
+  latitude: number;
   createdAt?: string;
   updatedAt?: string;
 };
@@ -30,16 +30,24 @@ export const useDistrictStore = create<DistrictStore>()((set, get) => ({
   error: null,
   districts: [],
   deleteDistrict: async (id: string) => {
+    const originalDistricts = get().districts;
+    set((state) => ({
+      districts: state.districts.filter((d) => d.id !== id),
+      response: null,
+      error: null,
+    }));
+
     try {
-      const response = await api.post(`/deleteDistrict/${id}`);
+      const response = await api.delete(`/district/${id}`);
       set({ response: response, error: null });
     } catch (e) {
-      set({ error: e });
+      console.error("Deletion failed, rolling back:", e);
+      set({ error: e, response: null, districts: originalDistricts });
     }
   },
   addDistrict: async (data: DistrictType) => {
     try {
-      const response = await api.post("/addDistrict", data);
+      const response = await api.post("/district", data);
       set({ response: response, error: null });
     } catch (e) {
       set({ error: e });
@@ -47,7 +55,7 @@ export const useDistrictStore = create<DistrictStore>()((set, get) => ({
   },
   getDistrict: async () => {
     try {
-      const response = await api.get("/getDistrict");
+      const response = await api.get("/district");
       set({ districts: response.data, error: null, response: response });
     } catch (e) {
       set({ error: e });

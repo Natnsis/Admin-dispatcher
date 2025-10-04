@@ -2,30 +2,42 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useDistrictStore } from "@/stores/DistrictStore";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const DistrictsForm = () => {
   const [name, setName] = useState<string>("");
-  const [longitude, setLongitude] = useState<string>("");
-  const [latitude, setLatitude] = useState<string>("");
+  const [longitude, setLongitude] = useState<number>(0);
+  const [latitude, setLatitude] = useState<number>(0);
   const add = useDistrictStore((state) => state.addDistrict);
   const response = useDistrictStore((state) => state.response);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const onSubmit = async (e) => {
     e.preventDefault();
     const data = { name, longitude, latitude };
+    if (isNaN(data.longitude) || isNaN(data.latitude)) {
+      console.error("Latitude or Longitude is invalid.");
+      return;
+    }
     try {
       setIsLoading(true);
       await add(data);
       setIsLoading(false);
-      alert(response);
+      alert(response?.data.message);
     } catch (e) {
-      console.log(e);
+      alert(response?.data.message);
       setIsLoading(false);
     }
+  };
+  const navigate = useNavigate();
+  const goBack = () => {
+    navigate("/districts");
   };
   return (
     <div className="h-screen flex justify-center items-center">
       <div className="border-2 border-[#4d3e27] p-5 rounded-xl">
+        <div className="flex justify-end">
+          <Button onClick={goBack}>Back</Button>
+        </div>
         <h1 className="font-heading text-3xl">District Form</h1>
         <form className="mt-5 flex flex-col gap-5" onSubmit={onSubmit}>
           <div className="">
@@ -41,14 +53,14 @@ const DistrictsForm = () => {
               placeholder="Longitude"
               type="number"
               onChange={(e) => {
-                setLongitude(e.target.value);
+                setLongitude(parseFloat(e.target.value));
               }}
             />
             <Input
               placeholder="Latitude"
               type="number"
               onChange={(e) => {
-                setLatitude(e.target.value);
+                setLatitude(parseFloat(e.target.value));
               }}
             />
           </div>
