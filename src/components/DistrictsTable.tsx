@@ -1,4 +1,3 @@
-import { Dispatch, District } from "@/assets/demo";
 import {
   Table,
   TableBody,
@@ -9,8 +8,16 @@ import {
 } from "@/components/ui/table";
 import { Button } from "./ui/button";
 import { Trash } from "lucide-react";
+import { useEffect } from "react";
+import { useDistrictStore, type DistrictType } from "@/stores/DistrictStore";
 
 export function DistrictsTable() {
+  const fetchDistrict = useDistrictStore((state) => state.getDistrict);
+  const data = useDistrictStore((state) => state.districts) as DistrictType[];
+  const deleteDistrict = useDistrictStore((state) => state.deleteDistrict);
+  useEffect(() => {
+    fetchDistrict();
+  }, [fetchDistrict]);
   return (
     <div className="h-[70vh] overflow-y-auto rounded-md border">
       <Table>
@@ -24,14 +31,20 @@ export function DistrictsTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {District.map((d) => (
+          {data.map((d) => (
             <TableRow key={d.id}>
               <TableCell>{d.name}</TableCell>
               <TableCell>{d.latitude}</TableCell>
               <TableCell>{d.longitude}</TableCell>
               <TableCell>{d.createdAt}</TableCell>
               <TableCell className="flex gap-2">
-                <Button variant="ghost" size="sm">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    deleteDistrict(d.id!);
+                  }}
+                >
                   <Trash className="h-4 w-4" />
                 </Button>
               </TableCell>

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axios, { type AxiosResponse } from "axios";
 //types
-export type District = {
+export type DistrictType = {
   id?: string;
   name: string;
   longitude: string;
@@ -13,9 +13,10 @@ export type District = {
 export type DistrictStore = {
   response: AxiosResponse | null;
   error: null | any;
-  districts: District[];
-  addDistrict: (data: District) => Promise<void>;
+  districts: DistrictType[];
+  addDistrict: (data: DistrictType) => Promise<void>;
   deleteDistrict: (id: string) => Promise<void>;
+  getDistrict: () => Promise<void>;
 };
 
 //api
@@ -36,10 +37,18 @@ export const useDistrictStore = create<DistrictStore>()((set, get) => ({
       set({ error: e });
     }
   },
-  addDistrict: async (data: District) => {
+  addDistrict: async (data: DistrictType) => {
     try {
       const response = await api.post("/addDistrict", data);
       set({ response: response, error: null });
+    } catch (e) {
+      set({ error: e });
+    }
+  },
+  getDistrict: async () => {
+    try {
+      const response = await api.get("/getDistrict");
+      set({ districts: response.data, error: null, response: response });
     } catch (e) {
       set({ error: e });
     }
