@@ -3,6 +3,7 @@ import { DispatchersTable } from "@/components/DispatchersTable";
 import Profile from "@/components/Profile";
 import Sidebar from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
+import { useDispatcherStore } from "@/stores/DispatcherStore";
 import {
   Bot,
   CircleUser,
@@ -10,9 +11,14 @@ import {
   UserPlus,
   UsersRound,
 } from "lucide-react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Dispatchers = () => {
+  const { getDispatchers, dispatchers } = useDispatcherStore();
+  useEffect(() => {
+    getDispatchers();
+  }, [getDispatchers]);
   const navigate = useNavigate();
   const add = () => {
     navigate("/add");
@@ -40,7 +46,7 @@ const Dispatchers = () => {
               </div>
             </div>
             <div className={miniCards}>
-              <h1 className="font-text text-4xl">162</h1>
+              <h1 className="font-text text-4xl">{dispatchers.length}</h1>
               <div className="flex gap-1">
                 <UsersRound />
                 <p>Dispatchers</p>

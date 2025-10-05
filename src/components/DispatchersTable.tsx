@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "./ui/button";
-import { Pencil, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import { useDispatcherStore } from "@/stores/DispatcherStore";
 import { useEffect } from "react";
 
@@ -17,6 +17,8 @@ export function DispatchersTable() {
   useEffect(() => {
     getDispatchers();
   }, [getDispatchers]);
+
+  console.log(dispatchers);
 
   return (
     <div className="h-[50vh] overflow-y-auto rounded-md border">
@@ -51,9 +53,6 @@ export function DispatchersTable() {
                   onClick={() => deleteDispatcher(d.id)}
                 >
                   <Trash className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm">
-                  <Pencil className="h-4 w-4" />
                 </Button>
               </TableCell>
             </TableRow>
