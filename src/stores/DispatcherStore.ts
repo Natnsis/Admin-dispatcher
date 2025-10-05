@@ -48,7 +48,7 @@ export const useDispatcherStore = create<DispatcherStore>()((set, get) => ({
       const res = await api.get("/dispatcher");
       set({ dispatchers: res.data, error: null });
     } catch (err: any) {
-      console.error("❌ Error fetching dispatchers:", err);
+      console.error("Error fetching dispatchers:", err);
       set({ error: err.message });
     } finally {
       set({ loading: false });
@@ -62,7 +62,7 @@ export const useDispatcherStore = create<DispatcherStore>()((set, get) => ({
       const res = await api.get(`/dispatcher/${id}`);
       set({ user: res.data, error: null });
     } catch (err: any) {
-      console.error("❌ Error fetching dispatcher:", err);
+      console.error("Error fetching dispatcher:", err);
       set({ error: err.message });
     } finally {
       set({ loading: false });
@@ -93,7 +93,7 @@ export const useDispatcherStore = create<DispatcherStore>()((set, get) => ({
       // Refresh the dispatcher list
       await get().getDispatchers();
     } catch (err: any) {
-      console.error("❌ Error in addDispatcher:", err);
+      console.error("Error in addDispatcher:", err);
 
       // Capture both frontend and backend error messages
       const message =
@@ -104,7 +104,7 @@ export const useDispatcherStore = create<DispatcherStore>()((set, get) => ({
 
       set({
         error: message,
-        response: `❌ Failed to add dispatcher: ${message}`,
+        response: `Failed to add dispatcher: ${message}`,
         loading: false,
       });
     } finally {
@@ -120,7 +120,7 @@ export const useDispatcherStore = create<DispatcherStore>()((set, get) => ({
       set({ response: res.data?.message || "Dispatcher updated successfully" });
       await get().getDispatchers();
     } catch (err: any) {
-      console.error("❌ Error updating dispatcher:", err);
+      console.error("Error updating dispatcher:", err);
       set({ error: err.message });
     } finally {
       set({ loading: false });
@@ -135,7 +135,7 @@ export const useDispatcherStore = create<DispatcherStore>()((set, get) => ({
       set({ response: res.data?.message || "Dispatcher deleted successfully" });
       await get().getDispatchers();
     } catch (err: any) {
-      console.error("❌ Error deleting dispatcher:", err);
+      console.error("Error deleting dispatcher:", err);
       set({ error: err.message });
     } finally {
       set({ loading: false });
