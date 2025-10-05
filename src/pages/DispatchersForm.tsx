@@ -9,107 +9,120 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useDispatcherStore } from "@/stores/DispatcherStore";
 import { useDistrictStore, type DistrictType } from "@/stores/DistrictStore";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const DispatchersForm = () => {
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [districtId, setDistrictId] = useState<string>("");
+  const [fName, setFName] = useState("");
+  const [lName, setLName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [districtId, setDistrictId] = useState("");
   const [image, setImage] = useState<File | null>(null);
 
+  const { addDispatcher, response, error, loading } = useDispatcherStore();
+  const { getDistrict, districts } = useDistrictStore();
+
   const navigate = useNavigate();
-  const goBack = () => {
-    navigate("/dispatchers");
-  };
-  const fetchDistricts = useDistrictStore((state) => state.getDistrict);
-  const districts = useDistrictStore(
-    (state) => state.districts
-  ) as DistrictType[];
 
   useEffect(() => {
-    fetchDistricts();
-  }, [fetchDistricts]);
+    getDistrict();
+  }, [getDistrict]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const data = { firstName, lastName, username, password, districtId, image };
-    console.log(data);
+    if (!image) return alert("Please select an image.");
+
+    await addDispatcher({
+      fName,
+      lName,
+      username,
+      password,
+      districtId,
+      image,
+    });
   };
+
   return (
-    <div className="h-screen flex justify-center items-center">
-      <div className="border-2 border-[#4d3e27] p-5 rounded-xl">
-        <div className="flex justify-end">
-          <Button onClick={goBack}>Back</Button>
+    <div className="min-h-screen flex justify-center items-center">
+      <div className="border-2 border-primary p-8 rounded-2xl shadow-lg w-[400px]">
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="font-bold text-2xl">Add Dispatcher</h1>
+          <Button onClick={() => navigate("/dispatchers")} variant="outline">
+            Back
+          </Button>
         </div>
-        <h1 className="font-heading text-3xl">Dispatchers Form</h1>
-        <form className="mt-5 flex flex-col gap-5" onSubmit={handleSubmit}>
-          <div className="flex gap-5">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="flex gap-3">
             <Input
               placeholder="First Name"
-              onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
+              onChange={(e) => setFName(e.target.value)}
+              required
             />
             <Input
               placeholder="Last Name"
-              onChange={(e) => {
-                setLastName(e.target.value);
-              }}
+              onChange={(e) => setLName(e.target.value)}
+              required
+              value={lName}
             />
           </div>
-          <div className="flex gap-5 flex-col">
-            <Input
-              placeholder="Username"
-              onChange={(e) => {
-                setUsername(e.target.value);
-              }}
-            />
-            <Input
-              placeholder="Password"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
-          </div>
-          <div>
-            <Select onValueChange={(newValue) => setDistrictId(newValue)}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a district" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Select District</SelectLabel>
-                  {districts.map((d) => (
-                    <SelectItem value={d.id!}>{d.name}</SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex gap-5 items-center">
+          <Input
+            placeholder="Username"
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <Input
+            placeholder="Password"
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <Select onValueChange={setDistrictId}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select a district" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Districts</SelectLabel>
+                {districts.map((d: DistrictType) => (
+                  <SelectItem key={d.id} value={d.id!}>
+                    {d.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <div className="flex items-center gap-3">
             <label
               htmlFor="image"
-              className="bg-primary text-background font-bold px-3 py-1 rounded-lg "
+              className="bg-primary text-background px-4 py-1 rounded-md cursor-pointer hover:opacity-80"
             >
-              Select Image
+              Choose Image
             </label>
             <input
               type="file"
-              className="hidden"
               id="image"
+              className="hidden"
               onChange={(e) => {
-                if (e.target.files && e.target.files.length > 0) {
-                  setImage(e.target.files[0]);
-                }
+                if (e.target.files?.[0]) setImage(e.target.files[0]);
               }}
             />
-            <span>{image ? image.name : "no image selected"}</span>
+            <span className="text-sm text-gray-500">
+              {image?.name || "No image selected"}
+            </span>
           </div>
-          <Button type="submit">Submit</Button>
+
+          {response && (
+            <p className="text-green-600 text-sm text-center">{response}</p>
+          )}
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+
+          <Button type="submit" disabled={loading}>
+            {loading ? "Submitting..." : "Submit"}
+          </Button>
         </form>
       </div>
     </div>
